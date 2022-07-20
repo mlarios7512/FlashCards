@@ -1,0 +1,97 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model FlashCards.Models.CardSet
+@{
+}
+
+<body class="site-theme">
+    <h3>Name of set: @Model.Name</h3>
+
+    <div class="site-theme-secondary" id="potential-card">
+        <form asp-controller="Personal" asp-action="AddCardToSet" method="post">
+            <label name="cardDef" required>Definition/Question</label>
+            <textarea name="cardDef"></textarea>
+            <br />
+            <br />
+            <label name="cardExplanation">Explanation/Answer</label>
+            <textarea name="cardExplanation" required></textarea>
+            <br />
+            <input asp-for="Id" type="hidden">
+            <input asp-for="UserOwnerId" type="hidden">
+            <button class="custom-button" type="submit">Add to set</button>
+        </form>
+    </div>
+
+    <br />
+    <br />
+    
+    <h4>Cards currently in this set</h4>
+    @{
+        for (int i = 0; i < Model.Cards.Count; i++)
+        {
+            <div class="notecards-collection-edit-view site-theme-secondary">
+                <p style="color:black;">Question: @Model.Cards.ElementAt(i).Definition</p>
+                <br>
+                <p style="color:black;"><b>Answer:</b>@Model.Cards.ElementAt(i).Explanation</p>
+
+                <div class="unique-options">
+                    <div>
+                      <p>
+                          <button class="extendable-options" type="button" data-bs-toggle="collapse" data-bs-target="#card-options-@i" aria-expanded="false" aria-controls="card-options-@i">
+                            > Options <!--This is NOT an html tag. It's a ">" character.-->
+                          </button>
+                      </p>
+
+                      <div class="collapse collapse-horizontal" id="card-options-@i">
+                        <div class="card card-body" style="width: 300px; color:black;">
+                            <form asp-controller="Personal" asp-action="EditCard" method="get">
+                                <label name="curSetID">Card SET ID:</label>
+                                <input name="curSetID" value="@Model.Id">
+                                <br>
+                                <label name="cardToEditID">Card ID:</label>
+                                <input name="cardToEditID" value="@Model.Cards.ElementAt(i).Id">
+                                <br>
+                                <input asp-for="Id" type="hidden">
+                                <input asp-for="UserOwnerId" type="hidden">
+                                <button type="submit" class="btn btn-secondary">Edit card</button>
+                            </form>
+                            <br />
+                            <form asp-controller="Personal" asp-action="DeleteCard" method="post">
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-card-@i">
+                                Delete Card
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop-card-@i" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" id="body-warning-card-@i">
+                                        You cannot undo this action. Are you sure?
+                                    </div>
+                                    <div class="modal-footer" id="footer-warning-card-@i">
+                                        <label name="cardToDeleteID">Card ID:</label>
+                                        <input name="cardToDeleteID" value="@Model.Cards.ElementAt(i).Id">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="retract-remove-card-button-@i">Close</button>
+                                        <button type="submit" class="btn btn-danger">Delete card</button>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </form>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+            <br />
+        }
+    }
+
+</body>

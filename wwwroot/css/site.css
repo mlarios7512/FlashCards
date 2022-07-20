@@ -1,0 +1,86 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.set-name{
+    list-style: none;
+}
+
+.card-set-overview{
+    border-style: solid;
+    border-width: 5px;
+    border-color: firebrick;
+    border-radius: 10px;
+
+    max-width: 550px;
+}
+
+.hidden-input{
+    list-style-type:none;
+}
+
+.review-card {
+    border-style: solid;
+    border-width: 5px;
+    border-color: firebrick;
+    border-radius: 10px;
+
+    padding: 20px;
+}
+
+.custom-button{
+    padding: 7px;
+    border-radius: 8px;
+    background-color: rgb(215, 215, 0);
+    color:white;
+}
+
+.custom-button-answer {
+    padding: 7px;
+    border-radius: 8px;
+    background-color: rgb(15, 165, 0);
+    color: white;
+}
+
+.notecards-collection-edit-view {
+    background-color:white; 
+    max-width:520px;
+}
+
+.extendable-options {
+    height:auto;
+    width: auto;
+
+    background-color:white;
+    color:gray;
+}
+
+.unique-options{
+    background-color: white;
+}
+
+
+.site-theme {
+    background-color: blue;
+    color: white;
+}
+
+.site-theme-secondary {
+    background-color: white;
+    color: black;
+}

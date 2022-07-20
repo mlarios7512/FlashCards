@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model FlashCards.Models.Card
+@{
+}
+<body class="site-theme">
+    <form asp-controller="Home" asp-action="AddCard" method="post">
+        <input name="cardSetId" type="hidden" value="@Model.CardSetId">
+        <br />
+
+    
+        <label asp-for="Definition">Definition/Question</label>
+        <br />
+        <textarea asp-for="Definition" rows="4" cols="55" maxlength="75"></textarea>
+        <br />
+        <br />
+        <label asp-for="Explanation">Explanation/Answer</label>
+        <br />
+        <textarea asp-for="Explanation" rows="8" cols="55" maxlength="200"></textarea>
+    
+        <br />
+        <br />
+
+        <button type="submit">Add card to set</button>
+    </form>
+</body>

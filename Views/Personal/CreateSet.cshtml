@@ -1,0 +1,21 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model FlashCards.Models.CardSet
+@{
+}
+<body class="site-theme">
+    @{if(ViewBag.NoError == false)
+        {
+            <p style="color: red;">Error creating card set.</p>
+        }
+    }
+
+    <form asp-controller="Personal" asp-action="CreateSet" method="post">
+        <input asp-for="UserOwnerId" type="hidden">
+        <label asp-for="Name">Set name</label>
+        <input asp-for="Name" type="text">
+        <br />
+        <button class="custom-button" type="submit">Create set</button>
+    </form>
+</body>

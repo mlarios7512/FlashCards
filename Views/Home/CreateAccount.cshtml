@@ -1,0 +1,28 @@
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model FlashCards.Models.User
+@{
+}
+<body class="site-theme">
+
+    <h1>Create Account</h1>
+
+    <span asp-validation-for="Username" class="text-danger"></span>
+    <span asp-validation-for="Email" class="text-danger"></span>
+    <span asp-validation-for="Password" class="text-danger"></span>
+
+    <br>
+    <form asp-controller="Home" asp-action="CreateAccount" method="post">
+        <label asp-for="Username">Username</label>
+        <input asp-for="Username" type="text">
+        <br />
+        <label asp-for="Email">Email</label>
+        <input asp-for="Email" type="text">
+        <br />
+        <label asp-for="Password">Password</label>
+        <input asp-for="Password" type="password">
+        <br />
+        <button class="custom-button" type="submit">Create account</button>
+    </form>
+</body>
