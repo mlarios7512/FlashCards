@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h3>Flashcards</h3>
+<button>
+    <a asp-controller="Home" asp-action="AddCard" method="get">Create a card set</a>
+</button>
+<br />
+<br />
+<button>
+      <a asp-controller="Home" asp-action="ViewSets" method="get">Current testing page</a>
+</button>
+<br />
+<br />
+<button>
+      <a asp-controller="Home" asp-action="CreateAccount" method="get">Create account</a>
+</button>
+<br />
+<br />
+<button>
+      <a asp-controller="Home" asp-action="Login" method="get">Login</a>
+</button>

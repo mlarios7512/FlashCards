@@ -1,0 +1,35 @@
+@model FlashCards.Models.Card
+
+<body class="site-theme">
+    <h3>Edit Card</h3>
+    <br />
+    @{
+        if(ViewBag.NoError == false)
+        {
+            <p style="color: red;">There was an error submiting your changes.</p>
+        }
+    }
+
+    <form asp-controller="Personal" asp-action="EditCard" method="post">
+        <label asp-for="Id">Card ID:</label>
+        <input asp-for="Id">
+        <br>
+        <label asp-for="CardSetId">Card set ID:</label>
+        <input asp-for="CardSetId">
+        <br>
+        <label asp-for="UserOwnerId">Owner Id:</label>
+        <input asp-for="UserOwnerId">
+        <br>
+        <label asp-for="Definition">Definition/Question</label>
+        <br />
+        <textarea asp-for="Definition" rows="4" cols="55" maxlength="75"></textarea>
+        <br />
+        <br />
+        <label asp-for="Explanation">Explanation/Answer</label>
+        <br />
+        <textarea asp-for="Explanation" rows="8" cols="55" maxlength="200"></textarea>
+        <br />
+        <br />
+        <button class="custom-button" type="submit">Submit changes</button>
+    </form>
+</body>

@@ -1,0 +1,49 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model FlashCards.Models.CardSet
+
+<!--How to start with one card and proceed to next?-->
+<body class="site-theme">
+    <h4>@Model.Name</h4>
+    <br />
+    @{
+        for (int i = 0; i < Model.Cards.Count; i++)
+        {
+            <div class="review-card site-theme-secondary" id="card-@i">
+                <p id="question-@i">@Model.Cards.ElementAt(i).Definition</p>
+                <br>
+                <p class="card-answer" id="answer-@i"><b>Answer: </b> @Model.Cards.ElementAt(i).Explanation</p>
+                <br>
+                <button class="show-answer custom-button-answer">Show answer</button>
+                <button class="hide-answer custom-button-answer">Hide answer</button>
+                <br>
+                <br>
+
+                <button class="switch-to-next-card custom-button">Next card</button>
+                <button class="switch-to-prev-card custom-button">Prev card</button>
+            </div>
+
+            if(Model.Cards.Count == Model.Cards.Count -1)
+            {
+                <style>
+                    
+                    <div class="finished-review-message">
+                    <p>You've reviewed all cards in this set!</p>
+                    <br>
+                    <button class="switch-to-prev-card" id="back-to-last-card">Prev card</button>
+                    <br>
+                    <a asp-controller="Home" asp-action="ViewSets">Choose another set</a>
+                    </div>
+                    <p id="total-card-count"><span id="card-count"></span>@Model.Cards.Count</p>
+
+                </style>
+            }
+        }
+      
+    }
+
+
+                
+
+</body>
