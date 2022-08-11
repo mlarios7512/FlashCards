@@ -45,7 +45,7 @@
                         {
                             
                             <li class="hidden-input">
-                                <a class="btn btn-success" href="ReviewSet?cardsetId=@Model.MySets.ElementAt(i).Id" role="button">Review set</a>
+                                <a class="btn btn-success" asp-controller="Personal" asp-action="ReviewSet" asp-route-cardsetId="@Model.MySets.ElementAt(i).Id" role="button">Review set</a>
                             </li>
                         }
                     }
