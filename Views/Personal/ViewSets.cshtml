@@ -43,12 +43,9 @@
                     <br>
                     @{if(Model.MySets.ElementAt(i).Cards.Count > 0)
                         {
+                            
                             <li class="hidden-input">
-                                <form asp-controller="Personal" asp-action="ReviewSet" method="get">
-                                    <input name="cardsetId" type="hidden" value="@Model.MySets.ElementAt(i).Id">
-                                    <br>
-                                    <button class="custom-button-answer" type="submit">Review Set</button>
-                                </form>
+                                <a class="btn btn-success" href="ReviewSet?cardsetId=@Model.MySets.ElementAt(i).Id" role="button">Review set</a>
                             </li>
                         }
                     }
