@@ -1,33 +1,34 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlashCards.Models
 {
-    public class User
+    [Table("User")]
+    public partial class User
     {
-        public const int MAX_CARDS_PER_SET = 5;
-        public int Id { get; set; }
-
-        [Required]
-        public string Email {get; set;}
-
-
-        [Required(ErrorMessage ="A username is required")]
-        public string Username {get; set;}
-
-
-        [Required(ErrorMessage ="A password is required")]
-        public string Password {get; set;}
-
-        public List<CardSet> MySets { get; set; } = new List<CardSet>(MAX_CARDS_PER_SET);
-
-        public User() 
+        const int MAX_CARDS_PER_SET = 10;
+        public User()
         {
-            MySets = new List<CardSet>(MAX_CARDS_PER_SET);
+            CardSets = new HashSet<CardSet>();
         }
 
-        public int GetMaxCardPerSet()
+        [Key]
+        [Column("ID")]
+        public int Id { get; set; }
+        [StringLength(50)]
+        public string Email { get; set; } = null!;
+        [StringLength(50)]
+        public string Username { get; set; } = null!;
+        [StringLength(50)]
+        public string Password { get; set; } = null!;
+
+        [InverseProperty("UserOwner")]
+        public ICollection<CardSet> CardSets { get; set; } = new List<CardSet>();
+
+        public int GetMaxCardsPerSet() 
         {
             return MAX_CARDS_PER_SET;
         }

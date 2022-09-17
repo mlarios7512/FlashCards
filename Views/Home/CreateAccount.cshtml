@@ -5,6 +5,12 @@
 @{
 }
 <body class="site-theme">
+    @{
+        if (ViewBag.UserNameTaken == true) 
+        {
+            <p style="color:red">That username is already taken.</p>
+        }
+    }
 
     <h1>Create Account</h1>
 

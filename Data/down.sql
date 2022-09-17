@@ -1,0 +1,3 @@
+﻿DROP TABLE [User];
+DROP TABLE CardSet;
+DROP TABLE [Card];

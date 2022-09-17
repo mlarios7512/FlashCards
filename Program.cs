@@ -1,7 +1,11 @@
+using FlashCards.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<FlashCardsDBContext>(a => a.UseSqlServer(builder.Configuration.GetConnectionString("FlashCardsConnection")));
 
 var app = builder.Build();
 

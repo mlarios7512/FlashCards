@@ -1,25 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlashCards.Models
-
 {
-    public class CardSet
+    [Table("CardSet")]
+    public partial class CardSet
     {
-        public int Id { get; set; }
-        public int UserOwnerId {get; set;}
-        public string Name { get; set; }
-        public List<Card> Cards {get; set;} = new List<Card>(10);
-        public DateTime BestTime = new DateTime();
-
         public CardSet()
         {
-
+            Cards = new HashSet<Card>();
         }
 
-        public CardSet(string setName) 
-        {
-            Name = setName;
-        }
+        [Key]
+        [Column("ID")]
+        public int Id { get; set; }
+        [StringLength(50)]
+        public string Name { get; set; } = null!;
+        public int UserOwnerId { get; set; }
 
-}
+        [ForeignKey("UserOwnerId")]
+        [InverseProperty("CardSets")]
+        public virtual User UserOwner { get; set; } = null!;
+        [InverseProperty("CardSet")]
+        public virtual ICollection<Card> Cards { get; set; } = new List<Card>();
+    }
 }

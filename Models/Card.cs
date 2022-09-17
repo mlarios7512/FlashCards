@@ -1,27 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace FlashCards.Models
 {
-    public class Card
+    public partial class Card
     {
+        [Key]
+        [Column("ID")]
         public int Id { get; set; }
-        public int UserOwnerId {get; set;}
-        public int CardSetId {get; set;}
+        [StringLength(300)]
+        public string FrontCard { get; set; } = null!;
+        [StringLength(300)]
+        public string BackCard { get; set; } = null!;
+        public int CardSetId { get; set; }
 
-        [Required(ErrorMessage ="Card must have a definition.")]
-        public string Definition { get; set;}
-        public string Explanation { get; set;}
-
-        public Card()
-        {
-            
-        }
-
-        public Card(string myDef, string myExplanation) 
-        {
-            Definition = myDef;
-            Explanation = myExplanation;
-        }
-
+        [ForeignKey("CardSetId")]
+        [InverseProperty("Cards")]
+        public virtual CardSet CardSet { get; set; } = null!;
     }
 }
