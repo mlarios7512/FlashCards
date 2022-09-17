@@ -21,7 +21,7 @@ namespace FlashCards.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> ViewSets(int curUserId)  //WORKING W/ DB
+        public async Task<IActionResult> ViewSets(int curUserId)
         {
             User CurrentUser = await db.Users.SingleAsync(user => user.Id == curUserId);
             CurrentUser.CardSets = await db.CardSets.Where(cs => cs.UserOwnerId == curUserId).ToListAsync();
@@ -30,36 +30,6 @@ namespace FlashCards.Controllers
             {
                 CurrentUser.CardSets.ElementAt(i).Cards = await db.Cards.Where(card => card.CardSetId == CurrentUser.CardSets.ElementAt(i).Id).ToListAsync();
             }
-
-            
-
-
-            //------------------------------
-
-            //List<UserToCardSet> mappings = context.UserToCardSet.Where(map => map.UserId == curUserId).ToList(); //WILL CRASH IF NULL??? 
-            //User CurUser = context.Users.SingleOrDefault(user => user.Id == curUserId);
-
-            //if ((mappings != null) && (mappings.Count != 0))
-            //{
-            //    List<CardSet> PossibleSets = new List<CardSet>();
-            //    PossibleSets = context.CardSets.Where(set => set.UserOwnerId == mappings.FirstOrDefault().UserId).ToList(); //WILL CRASH IF NULL???
-
-            //    if (PossibleSets != null)
-            //        CurUser.MySets = PossibleSets;
-            //    else
-            //        CurUser.MySets = null;
-
-            //}
-            //else
-            //{
-            //    CurUser.MySets = null;
-            //}
-
-            //if (CurUser.MySets != null)
-            //{
-            //    for (int i = 0; i < CurUser.MySets.Count; i++)
-            //        CurUser.MySets.ElementAt(i).Cards = context.Cards.Where(card => card.CardSetId == CurUser.MySets.ElementAt(i).Id).ToList();
-            //}
 
             return View(CurrentUser);
         }

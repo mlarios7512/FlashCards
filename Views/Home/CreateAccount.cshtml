@@ -12,23 +12,36 @@
         }
     }
 
-    <h1>Create Account</h1>
+    <h3>Create Account</h3>
 
     <span asp-validation-for="Username" class="text-danger"></span>
     <span asp-validation-for="Email" class="text-danger"></span>
     <span asp-validation-for="Password" class="text-danger"></span>
+    <br />
 
-    <br>
     <form asp-controller="Home" asp-action="CreateAccount" method="post">
-        <label asp-for="Username">Username</label>
-        <input asp-for="Username" type="text">
-        <br />
-        <label asp-for="Email">Email</label>
-        <input asp-for="Email" type="text">
-        <br />
-        <label asp-for="Password">Password</label>
-        <input asp-for="Password" type="password">
-        <br />
+        <div class="mb-3 row">
+            <label asp-for="Username" class="col-sm-1 col-form-label">Username</label>
+            <div class="col-sm-2">
+                <input asp-for="Username" class="form-control form-control-sm" type="text">
+            </div>
+        </div>
+ 
+        <div class="mb-3 row">
+            <label asp-for="Email" class="col-sm-1 col-form-label">Email</label>
+            <div class="col-sm-2.5">
+                <input asp-for="Email" class="form-control form-control-sm" type="text">
+            </div>
+        </div>
+ 
+
+        <div class="mb-3 row">
+            <label asp-for="Password" class="col-sm-1 col-form-label">Password</label>
+            <div class="col-sm-2">
+                <input asp-for="Password" class="form-control form-control-sm" type="password">
+            </div>
+        </div>
+     
         <button class="custom-button" type="submit">Create account</button>
     </form>
 </body>

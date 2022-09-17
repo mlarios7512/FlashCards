@@ -13,15 +13,23 @@
 
     }
 
-    <h1>Login</h1>
+    <h3>Login</h3>
     <br>
     <form asp-controller="Home" asp-action="Login" method="post">
-        <label asp-for="Username">Username</label>
-        <input asp-for="Username" type="text">
-        <br />
-        <label asp-for="Password">Password</label>
-        <input asp-for="Password" type="text"> <!--SWITCH "type" to password AFTER TESTING-->
-        <br />
+        <div class="mb-5 row">
+            <label asp-for="Username">Username</label>
+            <div class="col-sm-3">
+                <input asp-for="Username" type="text">
+            </div>
+        <div />
+
+        <div class="mb-5 row">
+            <label asp-for="Password">Password</label>
+            <div class="col-sm-3">
+                <input asp-for="Password" type="password"> <!--SWITCH "type" to password AFTER TESTING-->
+            </div>
+        </div>
+
         <button class="custom-button" type="submit">Login</button>
     </form>
 </body>
