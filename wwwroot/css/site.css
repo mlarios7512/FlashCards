@@ -27,7 +27,13 @@ body {
     border-color: firebrick;
     border-radius: 10px;
 
-    max-width: 550px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+
+    margin: 15px 0px;
+
+/*
+    max-width: 550px;*/
 }
 
 .hidden-input{
@@ -84,3 +90,41 @@ body {
     background-color: white;
     color: black;
 }
+
+
+/*TO PLACE INTO "ViewSets.css" -----(below)*/
+
+
+.set-option-btns{
+    display:flex;
+    flex-direction:row;
+    gap: 8px;
+    
+    margin: 10px 0px;
+}
+
+.link-as-btn{
+    text-decoration:none;
+    border-color:none;
+}
+
+.link-as-btn:hover{
+    color:white;
+    background-color:rgb(195, 195, 0);
+}
+
+#main-nav > ul {
+    list-style-type:none;
+}
+
+#main-nav{
+    position:fixed;
+    width: 20%;
+}
+
+#main-nav{
+    background-color:white;
+    color:black;
+}
+
+/*TO PLACE INTO "ViewSets.css" -----(above)*/

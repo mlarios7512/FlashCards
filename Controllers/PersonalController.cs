@@ -74,11 +74,11 @@ namespace FlashCards.Controllers
         //}
 
         //[HttpGet]
-        //public IActionResult EditSet(int CardSetId)
+        //public IActionResult EditSet(int cardSetId)
         //{
         //    CardSet CurSet = new CardSet();
-        //    CurSet = context.CardSets.SingleOrDefault(set => set.Id == CardSetId);
-        //    CurSet.Cards = context.Cards.Where(card => card.CardSetId == CardSetId).ToList();
+        //    CurSet = context.CardSets.SingleOrDefault(set => set.Id == cardSetId);
+        //    CurSet.Cards = context.Cards.Where(card => card.CardSetId == cardSetId).ToList();
 
         //    return View(CurSet);
         //}

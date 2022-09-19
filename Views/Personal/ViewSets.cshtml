@@ -4,113 +4,127 @@
 @model FlashCards.Models.User
 
 <body class="site-theme">
-@{
-    <h3>My card sets</h3>
-    if(Model.CardSets == null)
-    {
-        <p>You have no card sets</p>
-    }
-    else
-    {    
-        for (int i = 0; i < Model.CardSets.Count; i++)
-        {
-            <div class="card-set-overview site-theme-secondary">
-                <ul>
-                    <li class="set-name">
+
+    <div class="row g-0">
+        <div class="col-sm-6 col-md-9">
+            <h3>My card sets</h3>
+            @{if(Model.CardSets == null)
+            {
+                    <p>You have no card sets</p>
+            }
+            else
+            {
+                for (int i = 0; i < Model.CardSets.Count; i++)
+                {
+                    <div class="card-set-overview site-theme-secondary" id="cardset-@i">
+         
                         <h4>@Model.CardSets.ElementAt(i).Name</h4>
-                    </li>
-                    <li>
-                    
+                
+
                         <div class="accordion accordion-flush" id="accordionFlushExample">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="flush-headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-@i" aria-expanded="false" aria-controls="flush-collapse-@i">
-                                View info
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapse-@i" aria-expanded="false" aria-controls="flush-collapse-@i">
+                                        View info
+                                    </button>
+                                </h2>
+                                <div id="flush-collapse-@i" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body">
+                                        <ul>
+                                            <li>Cards in set: @Model.CardSets.ElementAt(i).Cards.Count</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="set-option-btns">
+                            @{
+                            if (Model.CardSets.ElementAt(i).Cards.Count > 0)
+                            {
+                                <a class="btn btn-success" asp-controller="Personal" asp-action="ReviewSet" asp-route-cardsetId="@Model.CardSets.ElementAt(i).Id" role="button">Review set</a>
+                            }
+                            }
+                                <a class="custom-button link-as-btn" asp-controller="Personal" asp-action="EditSet" asp-route-cardSetId="@Model.CardSets.ElementAt(i).Id" role="button">Edit Set</a>
+                        </div>
+             
+   
+                        <form asp-controller="Personal" asp-action="DeleteSet" method="post">
+                            <button type="button" class="btn btn-danger delete-set-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop-set-@i">
+                                Delete set
                             </button>
+                           
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="staticBackdrop-set-@i" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" id="body-warning-set-@i">
+                                            Deleting the set will remove all cards within the set. You cannot undo this action. Are you sure?
+                                        </div>
+                                        <div class="modal-footer" id="footer-warning-set-@i">
+                                            <input name="setToDeleteID" type="hidden" value="@Model.CardSets.ElementAt(i).Id">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="retract-remove-set-button-@i">Close</button>
+                                            <button type="submit" class="btn btn-danger">Delete set</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                         
+                </div>
+            
+                }
+            }}
+        </div>
+        <div class="col-6 col-md-3">
+            <nav id="main-nav">
+                <ul>
+                    <li>
+                        <div class="accordion accordion-flush" id="accordionFlushExample">
+                            <div class="accordion-item">
+                            <h2 class="accordion-header" id="flush-headingOne">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                My sets
+                                </button>
                             </h2>
-                            <div id="flush-collapse-@i" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                            <div class="accordion-body">
+                            <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
                                 <ul>
-                                    <li>Cards in set: @Model.CardSets.ElementAt(i).Cards.Count</li>
+                                    @{for (int i = 0; i < Model.CardSets.Count; i++)
+                                    {
+                                        <li><a href="#cardset-@i">@Model.CardSets.ElementAt(i).Name</a></li>
+                                    }}
                                 </ul>
                             </div>
                             </div>
                         </div>
-                        </div>
-
                     </li>
-                    <br>
-                    <br>
-                    @{if(Model.CardSets.ElementAt(i).Cards.Count > 0)
-                        {
-                            
-                            <li class="hidden-input">
-                                <a class="btn btn-success" asp-controller="Personal" asp-action="ReviewSet" asp-route-cardsetId="@Model.CardSets.ElementAt(i).Id" role="button">Review set</a>
-                            </li>
-                        }
+                    @if (Model.CardSets.Count < Model.GetMaxCardsPerSet()) 
+                    {
+                        <li><a href="#add-cardset-btn">Add card set</a></li>
                     }
-                    <li class="hidden-input">
-                        <form asp-controller="Personal" asp-action="EditSet" method="get">
-                            <input name="cardsetId" type="hidden"  value="@Model.CardSets.ElementAt(i).Id">
-                            <br>
-                            <button class="custom-button" type="submit">Edit Set</button>
-                        </form>
-                    </li>
-                    <li class="hidden-input">
-                        <form asp-controller="Personal" asp-action="DeleteSet" method="post">
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-set-@i">
-                                Delete set
-                            </button>
-
-                                <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop-set-@i" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body" id="body-warning-set-@i">
-                                        Deleting the set will remove all cards within the set. You cannot undo this action. Are you sure?
-                                    </div>
-                                    <div class="modal-footer" id="footer-warning-set-@i">
-                                        <input name="setToDeleteID" type="hidden" value="@Model.CardSets.ElementAt(i).Id">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="retract-remove-set-button-@i">Close</button>
-                                        <button type="submit" class="btn btn-danger">Delete set</button>
-                                    </div>
-                                    </div>
-                                </div>
-                                </div>
-                        </form>
-                    </li>
                 </ul>
-            </div>
-            <br />
-            <br />
-        }
-    }
-    
+            </nav>
 
-    @if(Model.CardSets != null)
+        </div>
+    </div>
+
+    @*------------------------------------------*@
+
+@{
+    if(Model.CardSets.Count < Model.GetMaxCardsPerSet())
     {
-        if(Model.CardSets.Count < Model.GetMaxCardsPerSet())
-        {
-            <form asp-action="CreateSet" asp-controller="Personal" method="get">
-                <input name="curUserId" type="hidden" value="@Model.Id">
-                <button class="custom-button" type="submit">Create a card set</button>
-            </form>
-        }
-        else
-        {
-            <p>Card set limit reached. (Cannot create more cards.)</p>
-        }
+            <a id="add-cardset-btn" class="custom-button link-as-btn" asp-controller="Personal" asp-action="CreateSet" asp-route-curUserId="@Model.Id" role="button">Create a card set</a>
     }
     else
     {
-        <form asp-action="CreateSet" asp-controller="Personal" method="get">
-                <input name="curUserId" type="hidden" value="@Model.Id">
-                <button class="custom-button" type="submit">Create a card set</button>
-        </form>
+        <p>Card set limit reached. (Cannot create more cards.)</p>
     }
+
 }
 </body>
