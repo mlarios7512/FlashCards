@@ -1,0 +1,22 @@
+﻿.traversal-options {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    margin: 10px 0px;
+}
+
+
+.prev-card-btn {
+    background-color: rebeccapurple;
+    color: white;
+    padding: 5px 7px;
+    border-radius: 15px;
+}
+
+.next-card-btn{
+    background-color: limegreen;
+    color:white;
+    padding:5px 7px;
+
+    border-radius: 15px;
+}

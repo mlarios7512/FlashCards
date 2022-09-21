@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/reviewset.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FlashCards.styles.css" asp-append-version="true" />
 
     <span id="total-card-count">Cards in this set: @Model.Cards.Count</span>
@@ -29,7 +30,7 @@
             }            
         }
 
-        <button onclick="switchToNextCard()">Next Card</button>
+        <button class="next-card-btn" onclick="switchToNextCard()">Next Card</button>
       
     </div>
 
@@ -43,14 +44,7 @@
         let totalCardCount = backAnswers.length;
 
         function buildCardHtml()
-        {
-            if(curCardIndex >= totalCardCount)
-            {
-                console.log("NOT A VALID INDEX [buildCardHtml]:" + curCardIndex);
-            }
-
-            
-
+        {    
             let mainDiv = document.createElement("div");
             mainDiv.id = "card-" + curCardIndex.toString();
             mainDiv.className = "review-card site-theme-secondary";
@@ -74,6 +68,9 @@
             mainDiv.appendChild(front);
             mainDiv.appendChild(back);
 
+            let traversalOptions = document.createElement("div");
+            traversalOptions.className = "traversal-options";
+
 
             if(curCardIndex > 0)
             {
@@ -82,7 +79,9 @@
                 prevBtn.textContent = "Prev card";
                 prevBtn.addEventListener("click", switchToPrevCard);
 
-                mainDiv.appendChild(prevBtn);
+                traversalOptions.appendChild(prevBtn);
+
+                traversalOptions.appendChild(prevBtn);
             }
 
             if(curCardIndex < totalCardCount)
@@ -92,8 +91,10 @@
                 nextBtn.textContent = "Next card";
                 nextBtn.addEventListener("click", switchToNextCard);
 
-                mainDiv.appendChild(nextBtn);
+                traversalOptions.appendChild(nextBtn);
             }
+
+            mainDiv.appendChild(traversalOptions);
 
             document.body.appendChild(mainDiv);
 
@@ -114,7 +115,7 @@
             {
                 buildCardHtml();
             }
-            else //Already review all cards
+            else //Already reviewed all cards.
             {
                 let mainDiv = document.createElement("div");
                 mainDiv.className = "review-card site-theme-secondary";
@@ -125,7 +126,6 @@
 
                 mainDiv.appendChild(endMsg);
 
-                //Add CSS (using the btn's ID) LATER.
                 let prevBtn = document.createElement("button");
                 prevBtn.className = "prev-card-btn";
                 prevBtn.id = "no-card-prev-btn";
