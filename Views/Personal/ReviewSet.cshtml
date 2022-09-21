@@ -1,51 +1,170 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model FlashCards.Models.CardSet
+﻿@model CardSet
+@{
+    Layout = null;
+}
 
-@*
 <!--How to start with one card and proceed to next?-->
 <body class="site-theme">
-    <h4>@Model.Name</h4>
-    <br />
-    @{
-        for (int i = 0; i < Model.Cards.Count; i++)
-        {
-            <div class="review-card site-theme-secondary" id="card-@i">
-                <p id="question-@i">@Model.Cards.ElementAt(i).Definition</p>
-                <br>
-                <p class="card-answer" id="answer-@i"><b>Answer: </b> @Model.Cards.ElementAt(i).Explanation</p>
-                <br>
-                <button class="show-answer custom-button-answer">Show answer</button>
-                <button class="hide-answer custom-button-answer">Hide answer</button>
-                <br>
-                <br>
 
-                <button class="switch-to-next-card custom-button">Next card</button>
-                <button class="switch-to-prev-card custom-button">Prev card</button>
-            </div>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/FlashCards.styles.css" asp-append-version="true" />
 
-            if(Model.Cards.Count == Model.Cards.Count -1)
+    <span id="total-card-count">Cards in this set: @Model.Cards.Count</span>
+
+    <div class="review-card site-theme-secondary" id="card-0">
+        <p id="frontcard-0">@Model.Cards.ElementAt(0).FrontCard</p>
+        <p id="backcard-0" class="card-answer"><b>Answer: </b> @Model.Cards.ElementAt(0).BackCard</p>
+
+     @*   <button class="custom-button-answer" onclick="toggleAnswer()">Show answer</button>*@
+
+        @{
+            string[] frontCards = new string[Model.Cards.Count];
+            string[] backCards = new string[Model.Cards.Count];
+
+            for (int i = 0; i < Model.Cards.Count; i++) 
             {
-                <style>
-                    
-                    <div class="finished-review-message">
-                    <p>You've reviewed all cards in this set!</p>
-                    <br>
-                    <button class="switch-to-prev-card" id="back-to-last-card">Prev card</button>
-                    <br>
-                    <a asp-controller="Home" asp-action="ViewSets">Choose another set</a>
-                    </div>
-                    <p id="total-card-count"><span id="card-count"></span>@Model.Cards.Count</p>
+                frontCards[i] = Model.Cards.ElementAt(i).FrontCard;
+                backCards[i] = Model.Cards.ElementAt(i).BackCard;
+            }            
+        }
 
-                </style>
+        <button onclick="switchToNextCard()">Next Card</button>
+      
+    </div>
+
+
+    <script>
+        let curCardIndex = 0;
+
+        let frontAnswers = @Html.Raw(Json.Serialize(frontCards));
+        let backAnswers = @Html.Raw(Json.Serialize(backCards));
+
+        let totalCardCount = backAnswers.length;
+
+        function buildCardHtml()
+        {
+            if(curCardIndex >= totalCardCount)
+            {
+                console.log("NOT A VALID INDEX [buildCardHtml]:" + curCardIndex);
+            }
+
+            
+
+            let mainDiv = document.createElement("div");
+            mainDiv.id = "card-" + curCardIndex.toString();
+            mainDiv.className = "review-card site-theme-secondary";
+
+            let front = document.createElement("p");
+            front.id = "frontcard-" + curCardIndex.toString();
+            front.textContent = frontAnswers[curCardIndex];
+
+            let back = document.createElement("p");
+            back.id = "backcard-" + curCardIndex.toString();
+            back.className = "card-answer";
+
+            let backAnswerPreFont = document.createElement("span");
+            backAnswerPreFont.className = "pre-answer-text";
+            backAnswerPreFont.textContent = "Answer: ";
+
+            back.appendChild(backAnswerPreFont);
+            back.innerHTML += backAnswers[curCardIndex];
+
+
+            mainDiv.appendChild(front);
+            mainDiv.appendChild(back);
+
+
+            if(curCardIndex > 0)
+            {
+                let prevBtn =  document.createElement("button");
+                prevBtn.className = "prev-card-btn";
+                prevBtn.textContent = "Prev card";
+                prevBtn.addEventListener("click", switchToPrevCard);
+
+                mainDiv.appendChild(prevBtn);
+            }
+
+            if(curCardIndex < totalCardCount)
+            {
+                let nextBtn = document.createElement("button");
+                nextBtn.className = "next-card-btn";
+                nextBtn.textContent = "Next card";
+                nextBtn.addEventListener("click", switchToNextCard);
+
+                mainDiv.appendChild(nextBtn);
+            }
+
+            document.body.appendChild(mainDiv);
+
+        }
+
+        function destoryCard()
+        {
+            $("#card-" + curCardIndex).empty();
+            $("#card-" + curCardIndex).remove();
+        }
+
+        function switchToNextCard()
+        {
+            destoryCard();
+            curCardIndex++;
+
+            if(curCardIndex < totalCardCount)
+            {
+                buildCardHtml();
+            }
+            else //Already review all cards
+            {
+                let mainDiv = document.createElement("div");
+                mainDiv.className = "review-card site-theme-secondary";
+                mainDiv.id = "end-of-set";
+                
+                let endMsg = document.createElement("p");
+                endMsg.textContent = "You've review all cards in this set!";
+
+                mainDiv.appendChild(endMsg);
+
+                //Add CSS (using the btn's ID) LATER.
+                let prevBtn = document.createElement("button");
+                prevBtn.className = "prev-card-btn";
+                prevBtn.id = "no-card-prev-btn";
+                prevBtn.textContent = "Prev card";
+               
+
+                prevBtn.addEventListener("click", switchToPrevCard);
+                mainDiv.appendChild(prevBtn);
+
+                document.body.appendChild(mainDiv);
+
             }
         }
-      
-    }
 
+        function switchToPrevCard()
+        {
+            if(curCardIndex < totalCardCount)
+            {
+                destoryCard();
+            }
+            else
+            {
+                $("#end-of-set").empty();
+                $("#end-of-set").remove();
+            }
 
-                
+            curCardIndex--;
+            console.log("curCardIndex: " + curCardIndex);
 
+            if(curCardIndex >= 0)
+            {
+                buildCardHtml();
+            }
+        }
+
+    </script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/reviewset.js" asp-append-version="true"></script>
 </body>
-*@

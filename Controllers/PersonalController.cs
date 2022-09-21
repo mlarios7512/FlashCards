@@ -1,10 +1,17 @@
 ﻿using FlashCards.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Web.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+
+
+using Controller = Microsoft.AspNetCore.Mvc.Controller;
+using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 
 namespace FlashCards.Controllers
 {
@@ -119,15 +126,21 @@ namespace FlashCards.Controllers
         //    return RedirectToAction("ViewSets", "Personal", new {curUserId = SetToDelete.UserOwnerId});
         //}
 
-        //[HttpGet]
-        //public IActionResult ReviewSet(int cardSetId)
-        //{
-        //    CardSet CurSet = new CardSet();
-        //    CurSet = context.CardSets.SingleOrDefault(set => set.Id == cardSetId);
-        //    CurSet.Cards = context.Cards.Where(cards=> cards.CardSetId == cardSetId).ToList();
+        [HttpGet]
+        public IActionResult ReviewSet(int cardSetId)
+        {
+            CardSet CurSet = db.CardSets.Single(set => set.Id == cardSetId);
+            CurSet.Cards = db.Cards.Where(cards => cards.CardSetId == cardSetId).ToList();
 
-        //    return View(CurSet);
-        //}
+
+            return View(CurSet);
+
+            //-------------------------------------------
+
+            //CardSetVM CurSet = new CardSetVM();
+
+
+        }
 
 
         //[HttpPost]
