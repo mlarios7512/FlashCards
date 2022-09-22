@@ -1,10 +1,6 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @model FlashCards.Models.CardSet
-@{
-}
-@*
+
 <body class="site-theme">
     <h3>Name of set: @Model.Name</h3>
 
@@ -31,9 +27,9 @@
         for (int i = 0; i < Model.Cards.Count; i++)
         {
             <div class="notecards-collection-edit-view site-theme-secondary">
-                <p style="color:black;">Question: @Model.Cards.ElementAt(i).Definition</p>
+                <p style="color:black;">Question: @Model.Cards.ElementAt(i).FrontCard</p>
                 <br>
-                <p style="color:black;"><b>Answer:</b>@Model.Cards.ElementAt(i).Explanation</p>
+                <p style="color:black;"><b>Answer:</b>@Model.Cards.ElementAt(i).BackCard</p>
 
                 <div class="unique-options">
                     <div>
@@ -46,9 +42,6 @@
                       <div class="collapse collapse-horizontal" id="card-options-@i">
                         <div class="card card-body" style="width: 300px; color:black;">
                             <form asp-controller="Personal" asp-action="EditCard" method="get">
-                                <label name="curSetID">Card SET ID:</label>
-                                <input name="curSetID" value="@Model.Id">
-                                <br>
                                 <label name="cardToEditID">Card ID:</label>
                                 <input name="cardToEditID" value="@Model.Cards.ElementAt(i).Id">
                                 <br>
@@ -95,4 +88,3 @@
     }
 
 </body>
-*@

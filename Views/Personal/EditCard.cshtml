@@ -1,6 +1,6 @@
 @model FlashCards.Models.Card
 
-@*
+
 <body class="site-theme">
     <h3>Edit Card</h3>
     <br />
@@ -12,26 +12,18 @@
     }
 
     <form asp-controller="Personal" asp-action="EditCard" method="post">
-        <label asp-for="Id">Card ID:</label>
-        <input asp-for="Id">
-        <br>
-        <label asp-for="CardSetId">Card set ID:</label>
-        <input asp-for="CardSetId">
-        <br>
-        <label asp-for="UserOwnerId">Owner Id:</label>
-        <input asp-for="UserOwnerId">
-        <br>
-        <label asp-for="Definition">Definition/Question</label>
+        <input asp-for="Id" type="hidden">
+        <input asp-for="CardSetId" type="hidden">
+        <label asp-for="FrontCard">Definition/Question</label>
         <br />
-        <textarea asp-for="Definition" rows="4" cols="55" maxlength="75"></textarea>
+        <textarea asp-for="FrontCard" rows="4" cols="55" maxlength="75"></textarea>
         <br />
         <br />
-        <label asp-for="Explanation">Explanation/Answer</label>
+        <label asp-for="BackCard">Explanation/Answer</label>
         <br />
-        <textarea asp-for="Explanation" rows="8" cols="55" maxlength="200"></textarea>
+        <textarea asp-for="BackCard" rows="8" cols="55" maxlength="200"></textarea>
         <br />
         <br />
         <button class="custom-button" type="submit">Submit changes</button>
     </form>
 </body>
-*@

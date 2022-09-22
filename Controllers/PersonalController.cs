@@ -12,6 +12,7 @@ using Newtonsoft.Json.Linq;
 
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
+using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 
 namespace FlashCards.Controllers
 {
@@ -42,89 +43,61 @@ namespace FlashCards.Controllers
         }
 
 
-        //[HttpGet]
-        //public IActionResult CreateSet(int curUserId) //WORKING W/ DB
-        //{
-        //    ViewBag.NoError = true;
+        [HttpGet]
+        public IActionResult CreateSet(int curUserId) //REPLACE CardSet W/ a ViewModel.
+        {
+            ViewBag.NoError = true;
 
-        //    User CurUser = context.Users.SingleOrDefault(user => user.Id == curUserId);
-        //    CardSet NewCardSet = new CardSet();
-        //    NewCardSet.UserOwnerId = (int)CurUser.Id;
+            CardSet NewCardSet = new CardSet();
+            NewCardSet.UserOwnerId = curUserId;
 
-        //    return View(NewCardSet);
-        //}
+            return View(NewCardSet);
+        }
 
-        //[HttpPost]
-        //public IActionResult CreateSet(CardSet newCard)  //WORKING W/ DB
-        //{
-        //    ViewBag.NoError = false;
+        [HttpPost]
+        public IActionResult CreateSet(CardSet newCard) //REPLACE CardSet W/ a ViewModel.
+        {
+            ViewBag.NoError = false;
 
-        //    if(newCard.Name != null)
-        //    {
-        //        UserToCardSet setToAdd = new UserToCardSet();
-        //        setToAdd.UserId = newCard.UserOwnerId;
-        //        setToAdd.CardSetId = newCard.Id;
+            if (newCard.Name != null)
+            {
+                db.CardSets.Add(newCard);
+                db.SaveChanges();
 
-        //        //Add CardSet "CardSets" table
-        //        context.CardSets.Add(newCard);
-        //        context.SaveChanges(); //REQUIRED (in order to give correct id to "UserToCardSet" Table)
+                return RedirectToAction("ViewSets", "Personal", new { curUserId = newCard.UserOwnerId });
+            }
+            return View(newCard);
+        }
 
-        //        //Add CardSet to "UserToCardSet" table
-        //        List<CardSet> UserSets = context.CardSets.Where(set => set.UserOwnerId == newCard.UserOwnerId).ToList();
-        //        setToAdd.CardSetId = UserSets.LastOrDefault().Id;
-        //        context.UserToCardSet.Add(setToAdd);
-        //        context.SaveChanges();
+        [HttpGet]
+        public IActionResult EditSet(int cardSetId)
+        {
+            CardSet CurSet = new CardSet();
+            CurSet = db.CardSets.SingleOrDefault(set => set.Id == cardSetId);
+            CurSet.Cards = db.Cards.Where(card => card.CardSetId == cardSetId).ToList();
 
-        //        return RedirectToAction("ViewSets", "Personal", new{curUserId = newCard.UserOwnerId});
-        //    }
-        //    return View(newCard);
-        //}
+            return View(CurSet);
+        }
 
-        //[HttpGet]
-        //public IActionResult EditSet(int cardSetId)
-        //{
-        //    CardSet CurSet = new CardSet();
-        //    CurSet = context.CardSets.SingleOrDefault(set => set.Id == cardSetId);
-        //    CurSet.Cards = context.Cards.Where(card => card.CardSetId == cardSetId).ToList();
+        [HttpPost]
+        public IActionResult DeleteSet(int setToDeleteId)
+        {
+            CardSet CardSetToRemove = new CardSet();
+            CardSetToRemove = db.CardSets.Single(cs => cs.Id == setToDeleteId);
 
-        //    return View(CurSet);
-        //}
+            List<Card> PotentialCardsToRemove = db.Cards.Where(c => c.CardSetId == setToDeleteId).ToList();
+            //db.Cards.RemoveRange(PotentialCardsToRemove);
 
-        //[HttpPost]
-        //public IActionResult DeleteSet(int setToDeleteId)  //WORKING W/ DB
-        //{
-        //    //NOTE: Could using "Where" cause a crash if there are no cards in the set?
-        //    List<Card> CardsToDelete = new List<Card>();
-        //    CardsToDelete = context.Cards.Where(card => card.CardSetId == setToDeleteId).ToList();
+            foreach (Card cardToRemove in PotentialCardsToRemove) 
+            {
+                db.Cards.Remove(cardToRemove);
+            }
 
-        //    CardSet SetToDelete = new CardSet();
-        //    SetToDelete = context.CardSets.SingleOrDefault(set => set.Id == setToDeleteId);
+            db.CardSets.Remove(CardSetToRemove);
+            db.SaveChanges();
 
-        //    UserToCardSet UserToSet = new UserToCardSet();
-        //    UserToSet = context.UserToCardSet.SingleOrDefault(mapOne => mapOne.CardSetId == setToDeleteId);
-
-        //    //NOTE: Could using "Where" cause a crash if there are no cards in the set?
-        //    List<CardsSetToCards> CardsToDeleteTwo = new List<CardsSetToCards>();
-        //    CardsToDeleteTwo = context.CardsSetToCards.Where(mapTwo => mapTwo.CardSetId == setToDeleteId).ToList();
-
-        //    if(CardsToDelete != null)
-        //    {
-        //        for(int i = 0; i < CardsToDelete.Count; i++)
-        //            context.Cards.Remove(CardsToDelete.ElementAt(i));
-        //    }
-
-        //    context.CardSets.Remove(SetToDelete);
-        //    context.UserToCardSet.Remove(UserToSet);
-
-        //    if(CardsToDeleteTwo != null)
-        //    {
-        //        for(int i = 0; i < CardsToDeleteTwo.Count; i++)
-        //            context.CardsSetToCards.Remove(CardsToDeleteTwo.ElementAt(i));
-        //    }
-        //    context.SaveChanges();
-
-        //    return RedirectToAction("ViewSets", "Personal", new {curUserId = SetToDelete.UserOwnerId});
-        //}
+            return RedirectToAction("ViewSets", "Personal", new { curUserId = CardSetToRemove.UserOwnerId });
+        }
 
         [HttpGet]
         public IActionResult ReviewSet(int cardSetId)
@@ -132,102 +105,72 @@ namespace FlashCards.Controllers
             CardSet CurSet = db.CardSets.Single(set => set.Id == cardSetId);
             CurSet.Cards = db.Cards.Where(cards => cards.CardSetId == cardSetId).ToList();
 
-
             return View(CurSet);
-
-            //-------------------------------------------
-
-            //CardSetVM CurSet = new CardSetVM();
-
-
         }
 
 
-        //[HttpPost]
-        //public IActionResult AddCardToSet(CardSet curSet, string cardDef, string cardExplanation)
-        //{
-        //    ViewBag.NoError = false;
-        //    if((cardDef != null) && (cardExplanation != null))
-        //    {
-        //        ViewBag.NoError = true;
-        //        Card NewCard = new Card();
-        //        NewCard.CardSetId = curSet.Id;
-        //        NewCard.UserOwnerId = curSet.UserOwnerId;
-        //        NewCard.Definition = cardDef;
-        //        NewCard.Explanation = cardExplanation;
+        [HttpPost]
+        public IActionResult AddCardToSet(CardSet curSet, string cardDef, string cardExplanation)
+        {
+            ViewBag.NoError = false;
+            if ((cardDef != null) && (cardExplanation != null))
+            {
+                Card newCard = new Card();
+                newCard.FrontCard = cardDef;
+                newCard.BackCard = cardExplanation;
+                newCard.CardSetId = curSet.Id;
 
-        //        context.Cards.Add(NewCard);
-        //        context.SaveChanges();
+                db.Cards.Add(newCard);
+                db.SaveChanges();
 
+                return RedirectToAction("ViewSets", "Personal", new { curUserId = curSet.UserOwnerId });
+            }
+            return View();
+        }
 
-        //        List<Card> CurUserCards = new List<Card>();
-        //        CurUserCards = context.Cards.Where(card => card.UserOwnerId == NewCard.UserOwnerId).ToList();
-        //        CurUserCards.Reverse();
-        //        Card NewestAddedCard = CurUserCards.FirstOrDefault();
+        [HttpGet]
+        public IActionResult EditCard(int cardToEditID)
+        {
+            ViewBag.NoError = true;
 
+            Card CurCard = new Card();
+            CurCard = db.Cards.SingleOrDefault(card => card.Id == cardToEditID);
 
-        //        CardsSetToCards map = new CardsSetToCards();
-        //        map.CardId = NewestAddedCard.Id;
-        //        map.CardSetId = NewestAddedCard.CardSetId;
-        //        context.CardsSetToCards.Add(map);
-        //        context.SaveChanges();
+            return View(CurCard);
+        }
 
-        //        return RedirectToAction("ViewSets", "Personal", new {curUserId = NewCard.UserOwnerId});
+        [HttpPost]
+        public IActionResult EditCard(Card curCard)
+        {
+            ViewBag.NoError = false;
+            if ((curCard.FrontCard != null) && (curCard.BackCard != null))
+            {
+                ViewBag.NoError = true;
 
+                db.Cards.Update(curCard);
+                db.SaveChanges();
 
-        //    }
-        //    return View();
-        //}
+                return RedirectToAction("EditSet", "Personal", new { cardSetId = curCard.CardSetId });
+            }
+            return View(curCard);
+        }
 
-        //[HttpGet]
-        //public IActionResult EditCard(int curSetId, int cardToEditID) //WORKING W/ DB
-        //{
-        //    ViewBag.NoError = true;
-        //    CardSet curSet = new CardSet();
-        //    curSet = context.CardSets.SingleOrDefault(set => set.Id == curSetId);
+        [HttpPost]
+        public IActionResult DeleteCard(int cardToDeleteId)
+        {
+            if (cardToDeleteId != 0)
+            {
+                Card CardToRemove = new Card();
+                CardToRemove = db.Cards.Single(card => card.Id == cardToDeleteId);
 
-        //    Card CurCard = new Card();
-        //    CurCard = context.Cards.SingleOrDefault(card => card.Id == cardToEditID);
+                db.Cards.Remove(CardToRemove);
+                db.SaveChanges();
 
-        //    return View(CurCard);
-        //}
+                return RedirectToAction("EditSet", "Personal", new { cardSetId = CardToRemove.CardSetId});
+            }
 
-        //[HttpPost]
-        //public IActionResult EditCard(Card curCard)  //WORKING W/ DB
-        //{
-        //    ViewBag.NoError = false;
-        //    if((curCard.Definition != null) && (curCard.Explanation != null))
-        //    {
-        //        ViewBag.NoError = true;
-
-        //        context.Cards.Single(card => card.Id == curCard.Id).Definition = curCard.Definition;
-        //        context.Cards.Single(card => card.Id == curCard.Id).Explanation = curCard.Explanation;
-        //        context.SaveChanges();
-
-        //        return RedirectToAction("ViewSets", "Personal", new {curUserId = curCard.UserOwnerId});
-        //    }
-
-        //    return View(curCard);
-        //}
-
-        //[HttpPost]
-        //public IActionResult DeleteCard(int cardToDeleteId) //WORKING W/ DB
-        //{
-        //    if(cardToDeleteId != 0)
-        //    {
-        //        Card CardToRemove = new Card();
-        //        CardToRemove  = context.Cards.SingleOrDefault(card => card.Id == cardToDeleteId);
-
-        //        CardsSetToCards mapToRemove = context.CardsSetToCards.SingleOrDefault(map => map.CardId == cardToDeleteId);
-
-        //        context.Cards.Remove(CardToRemove);
-        //        context.CardsSetToCards.Remove(mapToRemove);
-        //        context.SaveChanges();
-        //        return RedirectToAction("ViewSets","Personal", new {curUserId = CardToRemove.UserOwnerId});
-        //    }
-
-        //    return View();
-        //}
+            return View();
+        }
     }
     
 }
