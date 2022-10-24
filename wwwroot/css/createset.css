@@ -1,0 +1,19 @@
+﻿#potential-card-0{
+    background-color:gold;
+    color:black;
+    padding: 10px;
+}
+
+.side-indication{
+    text-align:center;
+}
+
+textarea {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+nav{
+    position:fixed;
+}

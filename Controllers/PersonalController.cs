@@ -13,6 +13,9 @@ using Newtonsoft.Json.Linq;
 using Controller = Microsoft.AspNetCore.Mvc.Controller;
 using HttpGetAttribute = Microsoft.AspNetCore.Mvc.HttpGetAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
+using FlashCards.Models.ViewModel;
+using System.Runtime.Intrinsics.X86;
+using System;
 
 namespace FlashCards.Controllers
 {
@@ -48,21 +51,21 @@ namespace FlashCards.Controllers
         {
             ViewBag.NoError = true;
 
-            CardSet NewCardSet = new CardSet();
-            NewCardSet.UserOwnerId = curUserId;
-
+            CardSetVM NewCardSet = new CardSetVM();
+            NewCardSet.CurUserId = curUserId;
             return View(NewCardSet);
         }
 
+        //SEE IF the array could be can passed into the controller. -- NEEDS TESTING
         [HttpPost]
-        public IActionResult CreateSet(CardSet newCard) //REPLACE CardSet W/ a ViewModel.
+        public IActionResult CreateSet(CardSet newCard, string[] PotentialFronts, string[] PotentialBacks ) //REPLACE CardSet W/ a ViewModel.
         {
             ViewBag.NoError = false;
 
             if (newCard.Name != null)
             {
-                db.CardSets.Add(newCard);
-                db.SaveChanges();
+                //db.CardSets.Add(newCard);
+                //db.SaveChanges();
 
                 return RedirectToAction("ViewSets", "Personal", new { curUserId = newCard.UserOwnerId });
             }

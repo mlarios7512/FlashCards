@@ -9,7 +9,7 @@ namespace FlashCards.Models
     [Table("User")]
     public partial class User
     {
-        const int MAX_CARDS_PER_SET = 10;
+        const int MAX_CARDS_PER_SET = 20;
         public User()
         {
             CardSets = new HashSet<CardSet>();
@@ -26,7 +26,7 @@ namespace FlashCards.Models
         public string Password { get; set; } = null!;
 
         [InverseProperty("UserOwner")]
-        public ICollection<CardSet> CardSets { get; set; } = new List<CardSet>();
+        public ICollection<CardSet> CardSets { get; set; } = new List<CardSet>(MAX_CARDS_PER_SET);
 
         public int GetMaxCardsPerSet() 
         {

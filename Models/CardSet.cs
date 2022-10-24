@@ -9,6 +9,7 @@ namespace FlashCards.Models
     [Table("CardSet")]
     public partial class CardSet
     {
+        const int MAX_CARDS_PER_SET = 20;
         public CardSet()
         {
             Cards = new HashSet<Card>();
@@ -25,6 +26,6 @@ namespace FlashCards.Models
         [InverseProperty("CardSets")]
         public virtual User UserOwner { get; set; } = null!;
         [InverseProperty("CardSet")]
-        public virtual ICollection<Card> Cards { get; set; } = new List<Card>();
+        public virtual ICollection<Card> Cards { get; set; } = new List<Card>(MAX_CARDS_PER_SET);
     }
 }
