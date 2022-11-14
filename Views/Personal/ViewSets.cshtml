@@ -119,7 +119,15 @@
 @{
     if(Model.CardSets.Count < Model.GetMaxCardsPerSet())
     {
-            <a id="add-cardset-btn" class="custom-button link-as-btn" asp-controller="Personal" asp-action="CreateSet" asp-route-curUserId="@Model.Id" role="button">Create a card set</a>
+        <button class="custom-button" id="create-new-cardset-btn">Create a card set</button>
+        <form asp-controller="Personal" asp-action="CreateSet" method="get" id="create-new-cardset-form" style="display:none">
+            <input for="curUserId" value="@Model.Id" type="hidden"/>
+            <label for="newCardAmount">Add how many cards?</label>
+            <input name="newCardAmount" type="number" min="0" max="@Model.GetMaxCardsPerSet()" size="5">
+            <button type="submit" class="custom-button">Confirm set creation</button>
+        </form>
+        
+      
     }
     else
     {
@@ -128,3 +136,14 @@
 
 }
 </body>
+
+
+@section Scripts
+    {
+    <script>
+
+    </script>
+    <script type="text/javascript" src="~/js/viewsets.js"></script>
+}
+
+

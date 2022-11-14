@@ -16,9 +16,6 @@ namespace FlashCards.Models.ViewModel
         public bool[] DeleteExistingCards = new bool[MAX_CARDS_PER_SET];
         //---------------EXISTING CARDS (above)---------------
 
-        public string []PotentialFronts = new string[MAX_CARDS_PER_SET];
-        public string []PotentialBacks = new string [MAX_CARDS_PER_SET];
-
         public CardSetVM() 
         {
         }

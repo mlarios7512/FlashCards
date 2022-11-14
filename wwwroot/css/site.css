@@ -1,3 +1,7 @@
+.initial-hidden {
+    display:none;
+}
+
 html {
   font-size: 14px;
 }
@@ -24,7 +28,7 @@ body {
 .card-set-overview{
     border-style: solid;
     border-width: 5px;
-    border-color: firebrick;
+    border-color:rebeccapurple;
     border-radius: 10px;
 
     padding-left: 10px;
