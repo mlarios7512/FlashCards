@@ -3,21 +3,11 @@
 }
 
 <h3>Flashcards</h3>
-<button>
-    <a asp-controller="Home" asp-action="AddCard" method="get">Create a card set</a>
-</button>
-<br />
-<br />
-<button>
-      <a asp-controller="Home" asp-action="ViewSets" method="get">Current testing page</a>
-</button>
-<br />
-<br />
-<button>
-      <a asp-controller="Home" asp-action="CreateAccount" method="get">Create account</a>
-</button>
-<br />
-<br />
-<button>
-      <a asp-controller="Home" asp-action="Login" method="get">Login</a>
-</button>
+
+<div class="container">
+    <div class="account-options">
+        <a asp-controller="Home" asp-action="CreateAccount" class="btn btn-dark" method="get" role="button">Create account</a>
+        <a asp-controller="Home" asp-action="Login" class="btn btn-dark"  method="get" role="button">Login</a>
+    </div>
+   
+</div>
