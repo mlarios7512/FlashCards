@@ -47,29 +47,42 @@ namespace FlashCards.Controllers
 
 
         [HttpGet]
-        public IActionResult CreateSet(int curUserId) //REPLACE CardSet W/ a ViewModel.
+        public IActionResult CreateSet(int curUserId, int newCardAmount) //REPLACE CardSet W/ a ViewModel.
         {
             ViewBag.NoError = true;
 
-            CardSetVM NewCardSet = new CardSetVM();
+            CreateNewCardSetVM NewCardSet = new CreateNewCardSetVM(newCardAmount);
             NewCardSet.CurUserId = curUserId;
             return View(NewCardSet);
         }
 
-        //SEE IF the array could be can passed into the controller. -- NEEDS TESTING
+        //IN PROGRESS
         [HttpPost]
-        public IActionResult CreateSet(CardSet newCard, string[] PotentialFronts, string[] PotentialBacks ) //REPLACE CardSet W/ a ViewModel.
+        public IActionResult CreateSet(CreateNewCardSetVM newSet) //REPLACE CardSet W/ a ViewModel.
         {
-            ViewBag.NoError = false;
-
-            if (newCard.Name != null)
+            //How to require a model property to NOT be null? 
+            //for (int i = 0; i < newSet.CardBackSide.Length; i++)
+            //{
+                
+            //    //ModelState.ClearValidationState("CardBackSide[" + i + "]");
+            //}
+            //TryValidateModel(newSet);
+            //ModelState.ClearValidationState("ItemSubmission.Person");
+            //ModelState.ClearValidationState("Items");
+            //ModelState.ClearValidationState("Person");
+            //newItemInfo.ItemSubmission.Person = CurrentPerson;
+            //newItemInfo.Person = CurrentPerson;
+            //newItemInfo.Items = new List<Item>();
+            //TryValidateModel(newItemInfo);
+            if (ModelState.IsValid == true) //Should be: (ModelState.IsValid == true). (Just changed for debugging)
             {
+
                 //db.CardSets.Add(newCard);
                 //db.SaveChanges();
 
-                return RedirectToAction("ViewSets", "Personal", new { curUserId = newCard.UserOwnerId });
+                return RedirectToAction("ViewSets", "Personal", new { curUserId = newSet.CurUserId });
             }
-            return View(newCard);
+            return RedirectToAction("CreateSet", new { curUserId = (int)newSet.CurUserId, newCardAmount = (int)newSet.CardFrontSide.Length } );
         }
 
         [HttpGet]

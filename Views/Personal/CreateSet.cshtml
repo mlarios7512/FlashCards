@@ -1,4 +1,4 @@
-﻿@model FlashCards.Models.ViewModel.CardSetVM
+﻿@model FlashCards.Models.ViewModel.CreateNewCardSetVM
 @{
     Layout = null;
 }
@@ -7,12 +7,6 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/createset.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/FlashCards.styles.css" asp-append-version="true" />
-@*
-    @{if(ViewBag.NoError == false)
-        {
-            <p style="color: red;">Error creating card set.</p>
-        }
-    }*@
 
     <div class="container">
         <div class="row">
@@ -20,33 +14,32 @@
                 <form asp-controller="Personal" asp-action="CreateSet" method="post">
                     <input asp-for="CurUserId" type="hidden">
                     <label asp-for="SetName">Set name</label>
-                    <input asp-for="SetName" required type="text">
-                    <br />
-              
-                    <div>
-                        <label>Add how many cards?</label>
-                        <input id="new-card-amount" type="number" min="0" max="@Model.GetMaxCardsPerSet()" size="5">
-                        <button id="confirm-new-card-amount-btn" onclick="buildPotentialCardTemplates()">Ok</button>
+                    <input asp-for="SetName" type="text" required>
+   @{
+         
+        for(int i = 0; i < Model.CardFrontSide.Length; i++) 
+        {
+            int visibleCardIndex = i+1;
+            <div id="potential-card-@i" class="container potential-card">
+                <div class="row">Card @visibleCardIndex</div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="side-indication">Front Card</div>
+
+                        <textarea id="potental-front-@i" asp-for="@Model.CardFrontSide[i]" cols="34" rows="5" maxlength="300" required></textarea>
                     </div>
+                    <div class="col-6">
+                        <div class="side-indication">Back Card</div>
+                        <textarea id="potental-back-@i" asp-for="@Model.CardBackSide[i]" cols="34" rows="5" maxlength="300" required></textarea>
+                    </div>
+                </div>
+                
+            </div>
+        }
+    }
 
-                    <br />
-                    <br />
 
-                    <!--SEE IF you can pass the array into the controller BEFORE PROCEEDING W/ Javascript.-->
-                        <div id="potential-card-0" class="container">  <!--Variable HERE-->
-                        <div class="row">Card 0</div>    <!--Variable HERE-->
-                            <div class="row">
-                                <div class="col-6">
-                                    <div class="side-indication">Front Card</div>
-                                    <textarea id="potental-front-0" name="PotentialFronts[0]" cols="34" rows="5" maxlength="300"></textarea>
-                                </div>
-
-                                <div class="col-6">
-                                    <div class="side-indication">Back Card</div>
-                                    <textarea id="potental-back-0" name="PotentialBacks[0]" cols="34" rows="5" maxlength="300"></textarea>
-                                </div>
-                            </div>
-                        </div>
+                    
 
                         <button type="submit">Create set</button>
                 </form>
@@ -55,41 +48,13 @@
             <div id="nav-area" class="col-3">
                 <nav>
                     <ul>
-                        <li>Card amount</li>
-                        <li>Create set</li>
+                        <li>Card amount</li> <!--Maybe show which cards have missing text (and offer a 'jump to' option)?-->
                     </ul>
                 </nav>
 
             </div>
         </div>
     </div>
-
- 
-
-    <script>
-        let cardAmountRequested = 0;
-
-        let cardIndex = 3;  //JUST FOR TESTING, NOT REQUIRED AT ALL!
-
-        function buildPotentialCardTemplates()
-        {
-            let mainCardDiv = document.createElement("div");
-            mainCardDiv.className = "unfinished-card";
-            
-            //let cardNum = document.createElement("h6");
-            //cardNum.textContent = "cardNum" + cardIndex;
-            //mainCardDiv.appendChild(cardNum);
-
-            
-
-            
-
-            $(mainCardDiv).appendTo("#new-cards");
-        }
-
-        
-
-    </script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

@@ -121,9 +121,9 @@
     {
         <button class="custom-button" id="create-new-cardset-btn">Create a card set</button>
         <form asp-controller="Personal" asp-action="CreateSet" method="get" id="create-new-cardset-form" style="display:none">
-            <input for="curUserId" value="@Model.Id" type="hidden"/>
+            <input name="curUserId" value="@Model.Id" type="hidden"/>
             <label for="newCardAmount">Add how many cards?</label>
-            <input name="newCardAmount" type="number" min="0" max="@Model.GetMaxCardsPerSet()" size="5">
+            <input name="newCardAmount" type="number" min="0" max="@Model.GetMaxCardsPerSet()" size="5"> <!---Needs math or function to prevent going past capacity in next view-->
             <button type="submit" class="custom-button">Confirm set creation</button>
         </form>
         
