@@ -47,7 +47,7 @@ namespace FlashCards.Controllers
 
 
         [HttpGet]
-        public IActionResult CreateSet(int curUserId, int newCardAmount) //REPLACE CardSet W/ a ViewModel.
+        public IActionResult CreateSet(int curUserId, int newCardAmount)
         {
             ViewBag.NoError = true;
 
@@ -56,33 +56,38 @@ namespace FlashCards.Controllers
             return View(NewCardSet);
         }
 
-        //IN PROGRESS
         [HttpPost]
-        public IActionResult CreateSet(CreateNewCardSetVM newSet) //REPLACE CardSet W/ a ViewModel.
+        public IActionResult CreateSet(CreateNewCardSetVM newSetInput)
         {
-            //How to require a model property to NOT be null? 
-            //for (int i = 0; i < newSet.CardBackSide.Length; i++)
-            //{
-                
-            //    //ModelState.ClearValidationState("CardBackSide[" + i + "]");
-            //}
-            //TryValidateModel(newSet);
-            //ModelState.ClearValidationState("ItemSubmission.Person");
-            //ModelState.ClearValidationState("Items");
-            //ModelState.ClearValidationState("Person");
-            //newItemInfo.ItemSubmission.Person = CurrentPerson;
-            //newItemInfo.Person = CurrentPerson;
-            //newItemInfo.Items = new List<Item>();
-            //TryValidateModel(newItemInfo);
-            if (ModelState.IsValid == true) //Should be: (ModelState.IsValid == true). (Just changed for debugging)
+
+            if (ModelState.IsValid == true)
             {
+                CardSet NewCardSet = new CardSet();
+                NewCardSet.Name = newSetInput.SetName;
+                NewCardSet.UserOwnerId = newSetInput.CurUserId;
 
-                //db.CardSets.Add(newCard);
-                //db.SaveChanges();
+                db.CardSets.Add(NewCardSet);
+                db.SaveChanges();
 
-                return RedirectToAction("ViewSets", "Personal", new { curUserId = newSet.CurUserId });
+
+                Card NewCard;
+                int NewSetId = db.CardSets.Single(set => set.Name == newSetInput.SetName).Id;
+                for (int i = 0; i < newSetInput.CardBackSide.Length; i++) 
+                {
+                    NewCard = new FlashCards.Models.Card();
+                    NewCard.CardSetId = NewSetId;
+                    NewCard.FrontCard = newSetInput.CardFrontSide[i];
+                    NewCard.BackCard = newSetInput.CardBackSide[i];
+
+                    db.Cards.Add(NewCard);
+                    db.SaveChanges();
+                }
+                
+
+
+                return RedirectToAction("ViewSets", "Personal", new { curUserId = newSetInput.CurUserId });
             }
-            return RedirectToAction("CreateSet", new { curUserId = (int)newSet.CurUserId, newCardAmount = (int)newSet.CardFrontSide.Length } );
+            return RedirectToAction("CreateSet", new { curUserId = (int)newSetInput.CurUserId, newCardAmount = (int)newSetInput.CardFrontSide.Length } );
         }
 
         [HttpGet]
