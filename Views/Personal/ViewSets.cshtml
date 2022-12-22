@@ -46,7 +46,8 @@
                                 <a class="btn btn-success" asp-controller="Personal" asp-action="ReviewSet" asp-route-cardsetId="@Model.CardSets.ElementAt(i).Id" role="button">Review set</a>
                             }
                             }
-                                <a class="custom-button link-as-btn" asp-controller="Personal" asp-action="EditSet" asp-route-cardSetId="@Model.CardSets.ElementAt(i).Id" role="button">Edit Set</a>
+                                @*<a class="custom-button link-as-btn" asp-controller="Personal" asp-action="EditSet" asp-route-cardSetId="@Model.CardSets.ElementAt(i).Id" role="button">Edit Set (old version)</a>*@
+                                <a class="custom-button link-as-btn" asp-controller="Personal" asp-action="TestCardEdits" asp-route-cardSetId="@Model.CardSets.ElementAt(i).Id" role="button">Edit Set</a>
                         </div>
              
    

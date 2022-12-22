@@ -1,0 +1,51 @@
+﻿#cardset-name{
+    margin-top: 10px;
+    margin-bottom: 100px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    color: black;
+    padding: 10px;
+    margin: 25px 0px;
+    row-gap: 20px;
+}
+
+.unchanged-card {
+    background-color: #e5e4e2;
+}
+
+.edited-card {
+    background-color: yellow;
+}
+
+.marked-for-delete-card {
+    background-color: #ff004f;
+    color:white;
+}
+
+.side-indication{
+   display:flex;
+   flex-direction: row;
+   align-items:center;
+   column-gap:5px;
+}
+
+.edited-subheader-indication {
+    color: #ffa500;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+.add-a-card {
+    padding: 50px;
+    background-color: #e5e4e2;
+}
+
+.plus-icon {
+    filter: invert(86%) sepia(42%) saturate(6946%) hue-rotate(72deg) brightness(100%) contrast(83%);
+    cursor: pointer;
+}
+  

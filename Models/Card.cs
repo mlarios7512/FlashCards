@@ -12,8 +12,10 @@ namespace FlashCards.Models
         [Column("ID")]
         public int Id { get; set; }
         [StringLength(300)]
+        [Required(AllowEmptyStrings = false)]
         public string FrontCard { get; set; } = null!;
         [StringLength(300)]
+        [Required(AllowEmptyStrings = false)]
         public string BackCard { get; set; } = null!;
         public int CardSetId { get; set; }
 

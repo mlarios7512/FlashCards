@@ -16,6 +16,7 @@ using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using FlashCards.Models.ViewModel;
 using System.Runtime.Intrinsics.X86;
 using System;
+using FlashCards.DAL.Abstract;
 
 namespace FlashCards.Controllers
 {
@@ -23,11 +24,66 @@ namespace FlashCards.Controllers
     {
         private readonly ILogger<PersonalController> _logger;
         private FlashCardsDBContext db;
+        private ICardSetRepository _cardSetRepository;
 
-        public PersonalController(ILogger<PersonalController> logger, FlashCardsDBContext db)
+        public PersonalController(ILogger<PersonalController> logger, FlashCardsDBContext db, ICardSetRepository cardRepo)
         {
             _logger = logger;
             this.db = db;
+            _cardSetRepository = cardRepo;
+        }
+
+        [HttpGet]
+        public IActionResult TestCardEdits(int cardSetId)
+        {
+            CardSet SetToEdit = db.CardSets.Include(s => s.Cards).Single(set => set.Id == cardSetId);
+
+            EditSetVM EditSetVM = new EditSetVM(SetToEdit.Cards.Count);
+            EditSetVM.SetId = SetToEdit.Id;
+            EditSetVM.SetName = SetToEdit.Name;
+            EditSetVM.MaxCardsPerSet = _cardSetRepository.GetMaxCardsAllowed();
+
+            for (int i = 0; i < SetToEdit.Cards.Count; i++)
+            {
+                Debug.WriteLine("ID of card: " + SetToEdit.Cards.ElementAt(i).Id);
+                EditSetVM.CardIDsInSet[i] = SetToEdit.Cards.ElementAt(i).Id;
+                EditSetVM.FrontCard[i] = SetToEdit.Cards.ElementAt(i).FrontCard;
+                EditSetVM.BackCard[i] = SetToEdit.Cards.ElementAt(i).BackCard;
+            }
+            EditSetVM.CardsToDelete = new bool[SetToEdit.Cards.Count];
+            
+
+            return View(EditSetVM);
+        }
+
+        //ERROR: Retrieves the wrong cards??? (needs further look into.)
+        //(The view only has 2 cards (even thought the DB is NOT being modified.)
+        [HttpPost]
+        public IActionResult TestCardEdits(EditSetVM editedSet) 
+        {
+            for (int i = 0; i < editedSet.FrontCard.Length; i++) 
+            {
+                Card UpdatedCard = db.Cards.SingleOrDefault(c => c.Id == editedSet.CardIDsInSet[i]);
+
+                db.Cards.Update(UpdatedCard);
+                db.SaveChanges();
+            }
+
+            //for (int i = 0; i < editedSet.CardsToDelete.Length; i++) 
+            //{
+            //    if (editedSet.CardsToDelete[i] == true)
+            //    {
+            //        Card CardToRemove = db.Cards.Single(c => c.Id == editedSet.CardIDsInSet[i]);
+            //        Debug.WriteLine("Card removed: " + '\n' +
+            //            "Front: " + CardToRemove.FrontCard + '\n' +
+            //            "Back: " + CardToRemove.BackCard);
+
+            //        //db.Cards.Remove(CardToRemove);
+            //        //db.SaveChanges();
+            //    }
+            //}
+
+            return View(editedSet);
         }
 
 
@@ -105,9 +161,7 @@ namespace FlashCards.Controllers
         {
             CardSet CardSetToRemove = new CardSet();
             CardSetToRemove = db.CardSets.Single(cs => cs.Id == setToDeleteId);
-
             List<Card> PotentialCardsToRemove = db.Cards.Where(c => c.CardSetId == setToDeleteId).ToList();
-            //db.Cards.RemoveRange(PotentialCardsToRemove);
 
             foreach (Card cardToRemove in PotentialCardsToRemove) 
             {
