@@ -1,6 +1,16 @@
-﻿#cardset-name{
-    margin-top: 10px;
+﻿#unique-edit{
+    background-color:blue;
+}
+
+#cardset-name{
+/*    margin-top: 10px;*/
     margin-bottom: 100px;
+}
+
+
+
+#title-content{
+    background-color:white;
 }
 
 .card {
@@ -48,4 +58,3 @@
     filter: invert(86%) sepia(42%) saturate(6946%) hue-rotate(72deg) brightness(100%) contrast(83%);
     cursor: pointer;
 }
-  
