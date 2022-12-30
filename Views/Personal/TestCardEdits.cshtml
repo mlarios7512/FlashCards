@@ -48,11 +48,11 @@
                                                 <textarea id="back-@i" cols="29" onkeyup="checkBack(@i, '@Model.BackCard[i]', '@Model.FrontCard[i]')" asp-for="BackCard[i]"></textarea>
                                             </div>
                                             <input asp-for="CardIDsInSet[i]" type="hidden"/>
-                                            @*<div>
+                                            <div>
                                                 <input asp-for="CardIDsInSet[i]" type="hidden">
                                                 <label asp-for="CardsToDelete[i]">Delete card</label>
                                                 <input asp-for="CardsToDelete[i]" id="checkbox-@i" onclick="toggleDeleteStatus('@i')" />
-                                            </div>*@
+                                            </div>
                                         </div>
                                     </div>
                                 }

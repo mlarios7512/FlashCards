@@ -25,12 +25,14 @@ namespace FlashCards.Controllers
         private readonly ILogger<PersonalController> _logger;
         private FlashCardsDBContext db;
         private ICardSetRepository _cardSetRepository;
+        private readonly IRepository<Card> _cardRepository;
 
-        public PersonalController(ILogger<PersonalController> logger, FlashCardsDBContext db, ICardSetRepository cardRepo)
+        public PersonalController(ILogger<PersonalController> logger, FlashCardsDBContext db, ICardSetRepository cardSetRepo, IRepository<Card> cardRepo)
         {
             _logger = logger;
             this.db = db;
-            _cardSetRepository = cardRepo;
+            _cardSetRepository = cardSetRepo;
+            _cardRepository = cardRepo;
         }
 
         [HttpGet]
@@ -63,27 +65,22 @@ namespace FlashCards.Controllers
         {
             for (int i = 0; i < editedSet.FrontCard.Length; i++) 
             {
-                Card UpdatedCard = db.Cards.SingleOrDefault(c => c.Id == editedSet.CardIDsInSet[i]);
+                Card UpdatedCard = _cardRepository.FindById(editedSet.CardIDsInSet[i]);
+                UpdatedCard.FrontCard = editedSet.FrontCard[i];
+                UpdatedCard.BackCard = editedSet.BackCard[i];
 
-                db.Cards.Update(UpdatedCard);
-                db.SaveChanges();
+                _cardRepository.AddOrUpdate(UpdatedCard);
             }
 
-            //for (int i = 0; i < editedSet.CardsToDelete.Length; i++) 
-            //{
-            //    if (editedSet.CardsToDelete[i] == true)
-            //    {
-            //        Card CardToRemove = db.Cards.Single(c => c.Id == editedSet.CardIDsInSet[i]);
-            //        Debug.WriteLine("Card removed: " + '\n' +
-            //            "Front: " + CardToRemove.FrontCard + '\n' +
-            //            "Back: " + CardToRemove.BackCard);
+            for (int i = 0; i < editedSet.CardsToDelete.Length; i++)
+            {
+                if (editedSet.CardsToDelete[i] == true)
+                {
+                    _cardRepository.DeleteById(editedSet.CardIDsInSet[i]);
+                }
+            }
 
-            //        //db.Cards.Remove(CardToRemove);
-            //        //db.SaveChanges();
-            //    }
-            //}
-
-            return View(editedSet);
+            return RedirectToAction("TestCardEdits", "Personal", new { cardSetId = editedSet.SetId });
         }
 
 

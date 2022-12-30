@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.IdentityModel.Tokens;
+using FlashCards.DAL.Concrete;
 
 namespace FlashCards.DAL.Concrete
 {
-    public class CardSetRepository: ICardSetRepository
+    public class CardSetRepository: Repository<CardSet>, ICardSetRepository
     {
-        private DbSet<Card> _cards;
-        public CardSetRepository(FlashCardsDBContext context)
+        public CardSetRepository(FlashCardsDBContext context): base(context)
         {
-            _cards = context.Cards;
+   
         }
 
         public int GetMaxCardsAllowed() 

@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<FlashCardsDBContext>(a => a.UseSqlServer(builder.Configuration.GetConnectionString("FlashCardsConnection")));
+builder.Services.AddDbContext<FlashCardsDBContext>(        options => options
+            .UseSqlServer(builder.Configuration.GetConnectionString("FlashCardsConnection")));
+builder.Services.AddScoped<DbContext, FlashCardsDBContext>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<ICardSetRepository, CardSetRepository>();
 builder.Services.AddSwaggerGen();
 
