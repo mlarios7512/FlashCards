@@ -58,8 +58,6 @@ namespace FlashCards.Controllers
             return View(EditSetVM);
         }
 
-        //ERROR: Retrieves the wrong cards??? (needs further look into.)
-        //(The view only has 2 cards (even thought the DB is NOT being modified.)
         [HttpPost]
         public IActionResult TestCardEdits(EditSetVM editedSet) 
         {
@@ -81,6 +79,19 @@ namespace FlashCards.Controllers
             }
 
             return RedirectToAction("TestCardEdits", "Personal", new { cardSetId = editedSet.SetId });
+        }
+
+        [HttpPost]
+        public IActionResult AddCardExistingSet(string front, string back , int setId) 
+        {
+            Card NewCard = new Card();
+            NewCard.FrontCard = front;
+            NewCard.BackCard = back;
+            NewCard.CardSetId = setId;
+
+            _cardRepository.AddOrUpdate(NewCard);
+
+            return RedirectToAction("TestCardEdits", "Personal", new { cardSetId = setId });
         }
 
 

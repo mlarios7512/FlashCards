@@ -51,30 +51,28 @@
                             </form>
                             <br />
                             <form asp-controller="Personal" asp-action="DeleteCard" method="post">
-                                <!-- Button trigger modal -->
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-card-@i">
                                 Delete Card
                                 </button>
 
-                                <!-- Modal -->
                                 <div class="modal fade" id="staticBackdrop-card-@i" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body" id="body-warning-card-@i">
+                                            You cannot undo this action. Are you sure?
+                                        </div>
+                                        <div class="modal-footer" id="footer-warning-card-@i">
+                                            <label name="cardToDeleteID">Card ID:</label>
+                                            <input name="cardToDeleteID" value="@Model.Cards.ElementAt(i).Id">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="retract-remove-card-button-@i">Close</button>
+                                            <button type="submit" class="btn btn-danger">Delete card</button>
+                                        </div>
+                                        </div>
                                     </div>
-                                    <div class="modal-body" id="body-warning-card-@i">
-                                        You cannot undo this action. Are you sure?
-                                    </div>
-                                    <div class="modal-footer" id="footer-warning-card-@i">
-                                        <label name="cardToDeleteID">Card ID:</label>
-                                        <input name="cardToDeleteID" value="@Model.Cards.ElementAt(i).Id">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="retract-remove-card-button-@i">Close</button>
-                                        <button type="submit" class="btn btn-danger">Delete card</button>
-                                    </div>
-                                    </div>
-                                </div>
                                 </div>
                             </form>
                         </div>

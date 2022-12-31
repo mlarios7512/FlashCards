@@ -11,156 +11,88 @@
 </head>
 
 <body id="unique-edit">
+
+
     <div id="title-content">
 
-    
+
         <h1 class="text-center" id="cardset-name">@Model.SetName</h1>
         <h5 id="card-count">@Model.FrontCard.Length out of @Model.MaxCardsPerSet cards.</h5>
     </div>
     @{
-        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Edit</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Add cards</button>
-            </li>
-        </ul>
-        <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
-                <form asp-action="TestCardEdits" asp-controller="Personal" method="post" class="ms-3">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <input asp-for="SetId" type="hidden" />
-                            <input asp-for="SetName" type="hidden" />
 
-                            @{
-                                for (int i = 0; i < Model.FrontCard.Length; i++)
-                                {
-                                    <div class="col-4">
-                                        <div class="card unchanged-card" id="card-@i">
-                                            <div class="side-indication">
-                                                <h6 id="front-header-@i" ondblclick="undoFront(@i, '@Model.FrontCard[i]', '@Model.BackCard[i]')">Front</h6>
-                                                <textarea id="front-@i" cols="29" onkeyup="checkFront(@i, '@Model.FrontCard[i]', '@Model.BackCard[i]')" asp-for="FrontCard[i]"></textarea>
-                                            </div>
-                                            <div class="side-indication">
-                                                <h6 id="back-header-@i" ondblclick="undoBack(@i, '@Model.BackCard[i]', '@Model.FrontCard[i]')">Back</h6>
-                                                <textarea id="back-@i" cols="29" onkeyup="checkBack(@i, '@Model.BackCard[i]', '@Model.FrontCard[i]')" asp-for="BackCard[i]"></textarea>
-                                            </div>
-                                            <input asp-for="CardIDsInSet[i]" type="hidden"/>
-                                            <div>
-                                                <input asp-for="CardIDsInSet[i]" type="hidden">
-                                                <label asp-for="CardsToDelete[i]">Delete card</label>
-                                                <input asp-for="CardsToDelete[i]" id="checkbox-@i" onclick="toggleDeleteStatus('@i')" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            }
-                        </div>
-                    </div>
+            <h4 class="subsection-header">Edit cards</h4>
+            <form asp-action="TestCardEdits" asp-controller="Personal" id="card-edits-form" method="post" class="ms-3">
+                <div class="container-fluid">
+                    <div class="row">
+                        <input asp-for="SetId" type="hidden" />
+                        <input asp-for="SetName" type="hidden" />
 
-                    <button type="submit" class="custom-button">Submit changes</button>
-                </form>
-            </div>
-            <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab" tabindex="0">
-                <div class="col-4">
-                    <div class="card add-a-card">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" cfill="currentColor" class="bi bi-plus plus-icon" viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                        </svg>
-                        Add a card
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        //<div class="row g-0">
-
-
-                
-            
-            @*<div class="col-sm-6 col-md-9">
-
-                <form asp-action="TestCardEdits" asp-controller="Personal" method="post" class="ms-3">
-                    <div class="container-fluid">
-                        <div class="row">
-                         <input asp-for="SetId" type="hidden"/>
-                         <input asp-for="SetName" type="hidden"/>
-
-                        @{for(int i = 0; i < Model.FrontCard.Length; i++)
+                        @{
+                            for (int i = 0; i < Model.FrontCard.Length; i++)
                             {
                                 <div class="col-4">
                                     <div class="card unchanged-card" id="card-@i">
                                         <div class="side-indication">
                                             <h6 id="front-header-@i" ondblclick="undoFront(@i, '@Model.FrontCard[i]', '@Model.BackCard[i]')">Front</h6>
-                                            <textarea id="front-@i"  cols="29" onkeyup="checkFront(@i, '@Model.FrontCard[i]', '@Model.BackCard[i]')" asp-for="FrontCard[i]"></textarea>
-                                        </div> 
-                                        <div class="side-indication">
-                                                <h6 id="back-header-@i" ondblclick="undoBack(@i, '@Model.BackCard[i]', '@Model.FrontCard[i]')">Back</h6>
-                                                <textarea id="back-@i" cols="29" onkeyup="checkBack(@i, '@Model.BackCard[i]', '@Model.FrontCard[i]')" asp-for="BackCard[i]"></textarea>
+                                            <textarea id="front-@i" cols="29" onkeyup="checkFront(@i, '@Model.FrontCard[i]', '@Model.BackCard[i]')" asp-for="FrontCard[i]"></textarea>
                                         </div>
-                                        <div> 
+                                        <div class="side-indication">
+                                            <h6 id="back-header-@i" ondblclick="undoBack(@i, '@Model.BackCard[i]', '@Model.FrontCard[i]')">Back</h6>
+                                            <textarea id="back-@i" cols="29" onkeyup="checkBack(@i, '@Model.BackCard[i]', '@Model.FrontCard[i]')" asp-for="BackCard[i]"></textarea>
+                                        </div>
+                                        <input asp-for="CardIDsInSet[i]" type="hidden" />
+                                        <div>
                                             <input asp-for="CardIDsInSet[i]" type="hidden">
                                             <label asp-for="CardsToDelete[i]">Delete card</label>
-                                            <input asp-for="CardsToDelete[i]" id="checkbox-@i" onclick="toggleDeleteStatus('@i')"/>
+                                            <input asp-for="CardsToDelete[i]" id="checkbox-@i" onclick="toggleDeleteStatus('@i')" />
                                         </div>
-                                    </div> 
-                                </div>   
+                                    </div>
+                                </div>
                             }
                         }
-                        </div>
                     </div>
 
-                    <button type="submit" class="custom-button">Submit changes</button>
-                </form>
 
 
-
-                <br>
-                <br>
-                <br>
-
-                <div class="col-4">
-                    <div class="card add-a-card">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="54" height="54" class="plus-icon" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-                        </svg>
-                        Add a card
-                    </div>
                 </div>
 
+                <button type="button" id="submit-card-edits-btn" class="custom-button">Submit changes</button>
+            </form>
 
 
+     
+        <h4 class="subsection-header">Add a card</h4>
+        <div class="container-fluid ">
+            <div class="row">
+                <form id="potential-card-form" asp-controller="Personal" asp-action="AddCardExistingSet" method="post">
+                    <input type="hidden" name="setId" value="@Model.SetId">
+                    <div class="col-4">
+                        <div class="card not-ready-card" id="potential-card">
+                            <div class="side-indication">
+                                <h6>Front</h6>
+                                <textarea cols="29" name="front" id="potential-front" onkeyup="checkCardValidity()"></textarea>
+                            </div>
+                            <div class="side-indication">
+                                <h6>Back</h6>
+                                <textarea cols="29" name="back" id="potential-back" onkeyup="checkCardValidity()"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="submit-potential-card-btn" class="custom-button" disabled>Add to set</button>
+                </form>
+                
             </div>
-            <div class="col-6 col-md-3">
-                <nav class="ms-3">
-                    <ul>
-                        <li>Add
-                            <ul>
-                                <li>Cards</li>
-                            </ul>
-                        </li>
-                        <li>Delete
-                            <ul>
-                                <li>Select cards</li>
-                                <li>Delete all cards</li>
-                                <li>Delete set</li>
-                            </ul>  
-                        </li>
-                        <li>Edit
-                            <ul>
-                                <li>Set name</li>
-                                <li>Cards</li>
-                            </ul>
-                        </li>
-                            
-                    </ul>
-                </nav>
-            </div>*@
+        </div>
+        
+
+
+
+
 
     }
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="~/js/editset.js"></script>
+<script type="text/javascript" src="~/js/editset.js"></script>
+<script type="text/javascript" src="~/js//addcardexistingset.js"></script>

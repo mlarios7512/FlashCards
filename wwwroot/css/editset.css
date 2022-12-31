@@ -52,9 +52,26 @@
 .add-a-card {
     padding: 50px;
     background-color: #e5e4e2;
+    cursor: pointer;
 }
 
 .plus-icon {
     filter: invert(86%) sepia(42%) saturate(6946%) hue-rotate(72deg) brightness(100%) contrast(83%);
-    cursor: pointer;
+}
+
+.add-a-card:hover {
+    background-color: #a9a9a9;
+}
+
+.not-ready-card {
+    background-color: #e5e4e2;
+}
+
+.ready-to-add-card {
+    background-color: #32cd32;
+    color:white;
+}
+
+.subsection-header{
+    color:white;
 }

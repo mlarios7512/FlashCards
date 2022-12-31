@@ -60,6 +60,10 @@ body {
     color:white;
 }
 
+.custom-button:disabled {
+      opacity: 0.7;
+}
+
 .custom-button-answer {
     padding: 7px;
     border-radius: 8px;

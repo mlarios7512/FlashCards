@@ -29,10 +29,6 @@ function undoFront(cardId, originalString, originalOppositeSideString)
 }
 
 
-
-
-
-
 function checkBack(cardId, originalString, originalOppositeString)
 {
     let frontInput = $("#back-" + cardId).val();
@@ -131,3 +127,10 @@ function markAllForDelete()
 {
 
 }
+
+
+
+$("#submit-card-edits-btn").click(function () {
+    let formToSubmit = document.getElementById("card-edits-form");
+    formToSubmit.submit();
+});
